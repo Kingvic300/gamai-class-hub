@@ -1,14 +1,19 @@
 import { useState } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowRight, Mail, Lock } from "lucide-react";
-import { Link } from "react-router-dom";
 import { Logo } from "@/components/logo";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/components/ui/sonner";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -16,6 +21,7 @@ export default function Login() {
   });
   const [isLoading, setIsLoading] = useState(false);
 
+  const from = location.state?.from?.pathname || '/';
   const handleInputChange = (field: string, value: string | boolean) => {
     setCredentials(prev => ({ ...prev, [field]: value }));
   };
@@ -24,16 +30,33 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     
-    // Here you would integrate with your backend/Supabase authentication
-    console.log("Login attempt:", credentials);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsLoading(false);
-    
-    // Mock redirect based on user role (in real app, this would come from auth response)
-    const mockRole = "student"; // This would come from your auth system
-    window.location.href = `/${mockRole}`;
+    try {
+      const { error } = await login(credentials.email, credentials.password);
+      
+      if (error) {
+        toast.error("Login Failed", {
+          description: error
+        });
+      } else {
+        toast.success("Welcome back!", {
+          description: "You have been successfully logged in."
+        });
+        
+        // Redirect to intended page or dashboard based on role
+        if (from === '/') {
+          // Redirect to role-specific dashboard
+          navigate('/student'); // This will be handled by auth context
+        } else {
+          navigate(from, { replace: true });
+        }
+      }
+    } catch (error) {
+      toast.error("Login Failed", {
+        description: "An unexpected error occurred. Please try again."
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
