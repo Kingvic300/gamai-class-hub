@@ -1,326 +1,347 @@
-import { supabase } from './supabase';
+import axios from 'axios';
 import type { 
   User, 
   Class, 
-  ClassEnrollment, 
   Material, 
   Assessment, 
   AssessmentSubmission, 
   Notification,
-  CurriculumSchedule 
-} from './supabase';
+  ApiResponse,
+  PaginatedResponse,
+  LoginCredentials,
+  RegisterData,
+  DashboardStats
+} from './types';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
+
+// Create axios instance
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Request interceptor to add auth token
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('authToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Response interceptor for error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
 
 class ApiService {
+  // Authentication APIs
+  async login(credentials: LoginCredentials): Promise<ApiResponse<{ user: User; token: string }>> {
+    try {
+      const response = await api.post('/auth/login', credentials);
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Login failed'
+      };
+    }
+  }
+
+  async register(userData: RegisterData): Promise<ApiResponse<{ user: User; token: string }>> {
+    try {
+      const response = await api.post('/auth/register', userData);
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Registration failed'
+      };
+    }
+  }
+
+  async logout(): Promise<ApiResponse<void>> {
+    try {
+      await api.post('/auth/logout');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      return { success: true };
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Logout failed'
+      };
+    }
+  }
+
+  async getCurrentUser(): Promise<ApiResponse<User>> {
+    try {
+      const response = await api.get('/auth/me');
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to get user'
+      };
+    }
+  }
+
   // User Management APIs
-  async getUsers(filters?: { role?: string; status?: string }): Promise<User[]> {
-    let query = supabase.from('users').select('*');
-    
-    if (filters?.role) {
-      query = query.eq('role', filters.role);
+  async getUsers(filters?: { role?: string; status?: string; page?: number; limit?: number }): Promise<ApiResponse<PaginatedResponse<User>>> {
+    try {
+      const response = await api.get('/users', { params: filters });
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to fetch users'
+      };
     }
-    if (filters?.status) {
-      query = query.eq('status', filters.status);
-    }
-
-    const { data, error } = await query.order('created_at', { ascending: false });
-    
-    if (error) throw new Error(error.message);
-    return data || [];
   }
 
-  async approveUser(userId: string): Promise<User> {
-    const { data, error } = await supabase
-      .from('users')
-      .update({ status: 'active' })
-      .eq('id', userId)
-      .select()
-      .single();
-
-    if (error) throw new Error(error.message);
-    return data;
+  async approveUser(userId: string): Promise<ApiResponse<User>> {
+    try {
+      const response = await api.put(`/users/${userId}/approve`);
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to approve user'
+      };
+    }
   }
 
-  async rejectUser(userId: string): Promise<void> {
-    const { error } = await supabase
-      .from('users')
-      .update({ status: 'inactive' })
-      .eq('id', userId);
-
-    if (error) throw new Error(error.message);
+  async rejectUser(userId: string): Promise<ApiResponse<void>> {
+    try {
+      const response = await api.put(`/users/${userId}/reject`);
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to reject user'
+      };
+    }
   }
 
   // Class Management APIs
-  async getClasses(filters?: { teacher_id?: string; student_id?: string; status?: string }): Promise<Class[]> {
-    let query = supabase.from('classes').select(`
-      *,
-      teacher:users!classes_teacher_id_fkey(full_name),
-      enrollments:class_enrollments(count)
-    `);
-
-    if (filters?.teacher_id) {
-      query = query.eq('teacher_id', filters.teacher_id);
+  async getClasses(filters?: { teacherId?: string; studentId?: string; status?: string; page?: number; limit?: number }): Promise<ApiResponse<PaginatedResponse<Class>>> {
+    try {
+      const response = await api.get('/classes', { params: filters });
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to fetch classes'
+      };
     }
-    if (filters?.status) {
-      query = query.eq('status', filters.status);
+  }
+
+  async createClass(classData: Omit<Class, 'id' | 'createdAt' | 'updatedAt' | 'teacherName' | 'enrolledCount'>): Promise<ApiResponse<Class>> {
+    try {
+      const response = await api.post('/classes', classData);
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to create class'
+      };
     }
-    if (filters?.student_id) {
-      query = query.in('id', 
-        supabase.from('class_enrollments')
-          .select('class_id')
-          .eq('student_id', filters.student_id)
-      );
+  }
+
+  async updateClass(classId: string, updates: Partial<Class>): Promise<ApiResponse<Class>> {
+    try {
+      const response = await api.put(`/classes/${classId}`, updates);
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to update class'
+      };
     }
-
-    const { data, error } = await query.order('date', { ascending: true });
-    
-    if (error) throw new Error(error.message);
-    return data || [];
   }
 
-  async createClass(classData: Omit<Class, 'id' | 'created_at' | 'updated_at'>): Promise<Class> {
-    const { data, error } = await supabase
-      .from('classes')
-      .insert(classData)
-      .select()
-      .single();
-
-    if (error) throw new Error(error.message);
-    return data;
-  }
-
-  async updateClass(classId: string, updates: Partial<Class>): Promise<Class> {
-    const { data, error } = await supabase
-      .from('classes')
-      .update(updates)
-      .eq('id', classId)
-      .select()
-      .single();
-
-    if (error) throw new Error(error.message);
-    return data;
-  }
-
-  async enrollInClass(classId: string, studentId: string): Promise<ClassEnrollment> {
-    const { data, error } = await supabase
-      .from('class_enrollments')
-      .insert({
-        class_id: classId,
-        student_id: studentId
-      })
-      .select()
-      .single();
-
-    if (error) throw new Error(error.message);
-    return data;
-  }
-
-  async getClassEnrollments(classId: string): Promise<ClassEnrollment[]> {
-    const { data, error } = await supabase
-      .from('class_enrollments')
-      .select(`
-        *,
-        student:users!class_enrollments_student_id_fkey(full_name, email)
-      `)
-      .eq('class_id', classId);
-
-    if (error) throw new Error(error.message);
-    return data || [];
+  async enrollInClass(classId: string): Promise<ApiResponse<void>> {
+    try {
+      const response = await api.post(`/classes/${classId}/enroll`);
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to enroll in class'
+      };
+    }
   }
 
   // Materials Management APIs
-  async getMaterials(filters?: { class_id?: string; teacher_id?: string; subject?: string }): Promise<Material[]> {
-    let query = supabase.from('materials').select(`
-      *,
-      teacher:users!materials_teacher_id_fkey(full_name),
-      class:classes!materials_class_id_fkey(title)
-    `);
-
-    if (filters?.class_id) {
-      query = query.eq('class_id', filters.class_id);
+  async getMaterials(filters?: { classId?: string; teacherId?: string; subject?: string; page?: number; limit?: number }): Promise<ApiResponse<PaginatedResponse<Material>>> {
+    try {
+      const response = await api.get('/materials', { params: filters });
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to fetch materials'
+      };
     }
-    if (filters?.teacher_id) {
-      query = query.eq('teacher_id', filters.teacher_id);
-    }
-    if (filters?.subject) {
-      query = query.eq('subject', filters.subject);
-    }
-
-    const { data, error } = await query.order('created_at', { ascending: false });
-    
-    if (error) throw new Error(error.message);
-    return data || [];
   }
 
-  async uploadMaterial(materialData: Omit<Material, 'id' | 'created_at' | 'updated_at'>): Promise<Material> {
-    const { data, error } = await supabase
-      .from('materials')
-      .insert(materialData)
-      .select()
-      .single();
-
-    if (error) throw new Error(error.message);
-    return data;
+  async uploadMaterial(formData: FormData): Promise<ApiResponse<Material>> {
+    try {
+      const response = await api.post('/materials', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to upload material'
+      };
+    }
   }
 
-  async uploadFile(file: File, path: string): Promise<string> {
-    const { data, error } = await supabase.storage
-      .from('materials')
-      .upload(path, file);
-
-    if (error) throw new Error(error.message);
-
-    const { data: { publicUrl } } = supabase.storage
-      .from('materials')
-      .getPublicUrl(data.path);
-
-    return publicUrl;
+  async downloadMaterial(materialId: string): Promise<void> {
+    try {
+      const response = await api.get(`/materials/${materialId}/download`, {
+        responseType: 'blob',
+      });
+      
+      // Create download link
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', response.headers['content-disposition']?.split('filename=')[1] || 'download');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+    }
   }
 
   // Assessment Management APIs
-  async getAssessments(filters?: { teacher_id?: string; class_id?: string; student_id?: string }): Promise<Assessment[]> {
-    let query = supabase.from('assessments').select(`
-      *,
-      teacher:users!assessments_teacher_id_fkey(full_name),
-      class:classes!assessments_class_id_fkey(title)
-    `);
-
-    if (filters?.teacher_id) {
-      query = query.eq('teacher_id', filters.teacher_id);
+  async getAssessments(filters?: { teacherId?: string; classId?: string; studentId?: string; page?: number; limit?: number }): Promise<ApiResponse<PaginatedResponse<Assessment>>> {
+    try {
+      const response = await api.get('/assessments', { params: filters });
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to fetch assessments'
+      };
     }
-    if (filters?.class_id) {
-      query = query.eq('class_id', filters.class_id);
+  }
+
+  async createAssessment(assessmentData: Omit<Assessment, 'id' | 'createdAt' | 'updatedAt' | 'teacherName' | 'className'>): Promise<ApiResponse<Assessment>> {
+    try {
+      const response = await api.post('/assessments', assessmentData);
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to create assessment'
+      };
     }
-
-    const { data, error } = await query.order('created_at', { ascending: false });
-    
-    if (error) throw new Error(error.message);
-    return data || [];
   }
 
-  async createAssessment(assessmentData: Omit<Assessment, 'id' | 'created_at' | 'updated_at'>): Promise<Assessment> {
-    const { data, error } = await supabase
-      .from('assessments')
-      .insert(assessmentData)
-      .select()
-      .single();
-
-    if (error) throw new Error(error.message);
-    return data;
+  async submitAssessment(assessmentId: string, answers: Record<string, any>): Promise<ApiResponse<AssessmentSubmission>> {
+    try {
+      const response = await api.post(`/assessments/${assessmentId}/submit`, { answers });
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to submit assessment'
+      };
+    }
   }
 
-  async submitAssessment(submissionData: Omit<AssessmentSubmission, 'id' | 'submitted_at' | 'graded_at'>): Promise<AssessmentSubmission> {
-    const { data, error } = await supabase
-      .from('assessment_submissions')
-      .insert(submissionData)
-      .select()
-      .single();
-
-    if (error) throw new Error(error.message);
-    return data;
-  }
-
-  async getAssessmentSubmissions(assessmentId: string): Promise<AssessmentSubmission[]> {
-    const { data, error } = await supabase
-      .from('assessment_submissions')
-      .select(`
-        *,
-        student:users!assessment_submissions_student_id_fkey(full_name, email)
-      `)
-      .eq('assessment_id', assessmentId)
-      .order('submitted_at', { ascending: false });
-
-    if (error) throw new Error(error.message);
-    return data || [];
+  async getAssessmentSubmissions(assessmentId: string): Promise<ApiResponse<AssessmentSubmission[]>> {
+    try {
+      const response = await api.get(`/assessments/${assessmentId}/submissions`);
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to fetch submissions'
+      };
+    }
   }
 
   // Notification APIs
-  async getNotifications(userId: string): Promise<Notification[]> {
-    const { data, error } = await supabase
-      .from('notifications')
-      .select(`
-        *,
-        sender:users!notifications_sender_id_fkey(full_name)
-      `)
-      .eq('recipient_id', userId)
-      .order('created_at', { ascending: false });
-
-    if (error) throw new Error(error.message);
-    return data || [];
+  async getNotifications(page?: number, limit?: number): Promise<ApiResponse<PaginatedResponse<Notification>>> {
+    try {
+      const response = await api.get('/notifications', { params: { page, limit } });
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to fetch notifications'
+      };
+    }
   }
 
-  async createNotification(notificationData: Omit<Notification, 'id' | 'created_at'>): Promise<Notification> {
-    const { data, error } = await supabase
-      .from('notifications')
-      .insert(notificationData)
-      .select()
-      .single();
-
-    if (error) throw new Error(error.message);
-    return data;
+  async markNotificationAsRead(notificationId: string): Promise<ApiResponse<void>> {
+    try {
+      const response = await api.put(`/notifications/${notificationId}/read`);
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to mark notification as read'
+      };
+    }
   }
 
-  async markNotificationAsRead(notificationId: string): Promise<void> {
-    const { error } = await supabase
-      .from('notifications')
-      .update({ read: true })
-      .eq('id', notificationId);
+  async createNotification(notificationData: Omit<Notification, 'id' | 'createdAt' | 'senderName' | 'read'>): Promise<ApiResponse<Notification>> {
+    try {
+      const response = await api.post('/notifications', notificationData);
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to create notification'
+      };
+    }
+  }
 
-    if (error) throw new Error(error.message);
+  // Dashboard APIs
+  async getDashboardStats(): Promise<ApiResponse<DashboardStats>> {
+    try {
+      const response = await api.get('/dashboard/stats');
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to fetch dashboard stats'
+      };
+    }
   }
 
   // Curriculum APIs
-  async getCurriculumSchedule(filters?: { class_id?: string; date?: string }): Promise<CurriculumSchedule[]> {
-    let query = supabase.from('curriculum_schedule').select(`
-      *,
-      class:classes!curriculum_schedule_class_id_fkey(*)
-    `);
-
-    if (filters?.class_id) {
-      query = query.eq('class_id', filters.class_id);
+  async getCurriculumSchedule(filters?: { classId?: string; date?: string }): Promise<ApiResponse<any[]>> {
+    try {
+      const response = await api.get('/curriculum/schedule', { params: filters });
+      return response.data;
+    } catch (error: any) {
+      return {
+        success: false,
+        error: error.response?.data?.message || 'Failed to fetch curriculum schedule'
+      };
     }
-    if (filters?.date) {
-      query = query.eq('date', filters.date);
-    }
-
-    const { data, error } = await query.order('date', { ascending: true });
-    
-    if (error) throw new Error(error.message);
-    return data || [];
-  }
-
-  async createCurriculumSchedule(scheduleData: Omit<CurriculumSchedule, 'id' | 'created_at'>): Promise<CurriculumSchedule> {
-    const { data, error } = await supabase
-      .from('curriculum_schedule')
-      .insert(scheduleData)
-      .select()
-      .single();
-
-    if (error) throw new Error(error.message);
-    return data;
-  }
-
-  // Analytics APIs (for admin dashboard)
-  async getDashboardStats(): Promise<{
-    totalUsers: number;
-    activeClasses: number;
-    totalSubjects: number;
-    pendingApprovals: number;
-  }> {
-    const [usersCount, classesCount, subjectsCount, pendingCount] = await Promise.all([
-      supabase.from('users').select('id', { count: 'exact' }),
-      supabase.from('classes').select('id', { count: 'exact' }).eq('status', 'scheduled'),
-      supabase.from('classes').select('subject').then(({ data }) => 
-        new Set(data?.map(c => c.subject) || []).size
-      ),
-      supabase.from('users').select('id', { count: 'exact' }).eq('status', 'pending')
-    ]);
-
-    return {
-      totalUsers: usersCount.count || 0,
-      activeClasses: classesCount.count || 0,
-      totalSubjects: subjectsCount,
-      pendingApprovals: pendingCount.count || 0
-    };
   }
 }
 

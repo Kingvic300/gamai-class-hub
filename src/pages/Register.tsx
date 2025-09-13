@@ -128,7 +128,7 @@ export default function Register() {
     setIsLoading(false);
     
     // Redirect to appropriate dashboard based on role
-    window.location.href = `/${determineRole()}`;
+    window.location.href = '/dashboard';
   };
 
   if (isSurveyComplete) {
