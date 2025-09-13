@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Users, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
-import gamaiLogo from "@/assets/gamai-logo.png";
+import { Logo } from "@/components/logo";
 
 export function HeroSection() {
   return (
@@ -18,7 +18,7 @@ export function HeroSection() {
         <div className="max-w-4xl mx-auto">
           {/* Logo */}
           <div className="flex justify-center mb-8">
-            <img src={gamaiLogo} alt="Gamai" className="h-20 w-auto drop-shadow-lg" />
+            <Logo size="xl" className="drop-shadow-lg" />
           </div>
 
           {/* Hero headline */}

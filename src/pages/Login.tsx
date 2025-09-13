@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowRight, Mail, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
-import gamaiLogo from "@/assets/gamai-logo.png";
+import { Logo } from "@/components/logo";
 
 export default function Login() {
   const [credentials, setCredentials] = useState({
@@ -41,7 +41,7 @@ export default function Login() {
       <div className="w-full max-w-md">
         <Card className="gradient-card border-0 shadow-primary">
           <CardHeader className="text-center pb-6">
-            <img src={gamaiLogo} alt="Gamai" className="h-16 w-auto mx-auto mb-6" />
+            <Logo size="lg" className="mx-auto mb-6" />
             <CardTitle className="text-3xl font-bold text-gradient mb-2">Welcome Back</CardTitle>
             <p className="text-muted-foreground">
               Sign in to continue your learning journey

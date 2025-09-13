@@ -7,6 +7,11 @@ import Index from "./pages/Index";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import AdminDashboard from "./pages/AdminDashboard";
+import Classes from "./pages/Classes";
+import Materials from "./pages/Materials";
+import Assessments from "./pages/Assessments";
+import Curriculum from "./pages/Curriculum";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,8 +28,12 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/student" element={<Dashboard />} />
           <Route path="/teacher" element={<Dashboard />} />
-          <Route path="/admin" element={<Dashboard />} />
           <Route path="/parent" element={<Dashboard />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/classes" element={<Classes />} />
+          <Route path="/materials" element={<Materials />} />
+          <Route path="/assessments" element={<Assessments />} />
+          <Route path="/curriculum" element={<Curriculum />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

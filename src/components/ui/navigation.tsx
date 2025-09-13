@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
 import { 
   Home, 
@@ -14,7 +15,6 @@ import {
   Menu,
   X
 } from "lucide-react";
-import gamaiLogo from "@/assets/gamai-logo.png";
 
 // Mock user role - in real app this would come from auth context
 const useUserRole = () => {
@@ -62,7 +62,7 @@ export function Navigation() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
-              <img src={gamaiLogo} alt="Gamai" className="h-8 w-auto" />
+              <Logo size="sm" />
             </Link>
           </div>
 

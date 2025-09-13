@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ArrowRight, ArrowLeft, Users, GraduationCap, BookOpen, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
-import gamaiLogo from "@/assets/gamai-logo.png";
+import { Logo } from "@/components/logo";
 
 type Role = "admin" | "teacher" | "student" | "parent";
 
@@ -136,7 +136,7 @@ export default function Register() {
       <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 flex items-center justify-center p-4">
         <Card className="w-full max-w-md gradient-card border-0 shadow-primary">
           <CardHeader className="text-center pb-2">
-            <img src={gamaiLogo} alt="Gamai" className="h-12 w-auto mx-auto mb-4" />
+            <Logo className="mx-auto mb-4" />
             <CardTitle className="text-2xl font-bold text-gradient">Complete Your Registration</CardTitle>
             <p className="text-muted-foreground">
               Based on your answers, you'll be registered as a <span className="font-semibold text-primary">{determineRole()}</span>
@@ -206,7 +206,7 @@ export default function Register() {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl gradient-card border-0 shadow-primary">
         <CardHeader className="text-center pb-2">
-          <img src={gamaiLogo} alt="Gamai" className="h-12 w-auto mx-auto mb-4" />
+          <Logo className="mx-auto mb-4" />
           <CardTitle className="text-2xl font-bold text-gradient">Join Gamai</CardTitle>
           <p className="text-muted-foreground">
             Let's personalize your experience with a few quick questions

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
-import gamaiLogo from "@/assets/gamai-logo.png";
+import { Logo } from "@/components/logo";
 import raoatechLogo from "@/assets/raoatech-logo.png";
 
 export function Footer() {
@@ -11,7 +11,7 @@ export function Footer() {
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="flex items-center space-x-2 mb-4">
-              <img src={gamaiLogo} alt="Gamai" className="h-8 w-auto" />
+              <Logo size="sm" />
             </Link>
             <p className="text-muted-foreground mb-4 max-w-md">
               Transforming education with AI-powered learning experiences that connect teachers, students, and parents in a seamless ecosystem.
