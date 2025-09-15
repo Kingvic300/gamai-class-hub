@@ -1,61 +1,56 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Users, BookOpen } from "lucide-react";
+import { ArrowRight, BookOpen, Users, GraduationCap } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Logo } from "@/components/logo";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 gradient-hero opacity-5" />
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] dark:bg-grid-slate-700/25 dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.5))]" />
       
-      {/* Floating elements */}
-      <div className="absolute top-20 left-10 w-20 h-20 bg-primary/10 rounded-full blur-xl animate-pulse" />
-      <div className="absolute top-40 right-20 w-32 h-32 bg-accent/10 rounded-full blur-xl animate-pulse delay-300" />
-      <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-secondary/10 rounded-full blur-xl animate-pulse delay-700" />
-
       <div className="container mx-auto px-4 text-center relative z-10">
         <div className="max-w-4xl mx-auto">
-          {/* Logo */}
           <div className="flex justify-center mb-8">
-            <Logo size="xl" className="drop-shadow-lg" />
+            <Logo size="xl" className="drop-shadow-sm" />
           </div>
 
-          {/* Hero headline */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight">
             <span className="text-gradient">Transform Education</span>
             <br />
-            <span className="text-foreground">with AI-Powered Learning</span>
+            <span className="text-slate-900 dark:text-slate-100">with Smart Learning</span>
           </h1>
 
-          {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-            Gamai connects teachers, students, and parents in a seamless educational ecosystem 
-            powered by artificial intelligence and modern learning tools.
+          <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+            Connect teachers, students, and parents in a comprehensive educational platform 
+            designed for modern learning environments.
           </p>
 
-          {/* Stats */}
           <div className="flex flex-wrap justify-center gap-8 mb-12">
-            <div className="flex items-center space-x-2 text-muted-foreground">
-              <Users className="h-5 w-5 text-primary" />
-              <span className="font-semibold text-foreground">Multi-Role Platform</span>
+            <div className="flex items-center space-x-3 text-slate-600 dark:text-slate-300">
+              <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                <Users className="h-5 w-5 text-primary" />
+              </div>
+              <span className="font-medium">Multi-Role Platform</span>
             </div>
-            <div className="flex items-center space-x-2 text-muted-foreground">
-              <BookOpen className="h-5 w-5 text-accent" />
-              <span className="font-semibold text-foreground">Smart Curriculum</span>
+            <div className="flex items-center space-x-3 text-slate-600 dark:text-slate-300">
+              <div className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center">
+                <BookOpen className="h-5 w-5 text-accent" />
+              </div>
+              <span className="font-medium">Smart Curriculum</span>
             </div>
-            <div className="flex items-center space-x-2 text-muted-foreground">
-              <Sparkles className="h-5 w-5 text-secondary" />
-              <span className="font-semibold text-foreground">AI-Enhanced Learning</span>
+            <div className="flex items-center space-x-3 text-slate-600 dark:text-slate-300">
+              <div className="w-10 h-10 bg-secondary/10 rounded-full flex items-center justify-center">
+                <GraduationCap className="h-5 w-5 text-secondary" />
+              </div>
+              <span className="font-medium">Enhanced Learning</span>
             </div>
           </div>
 
-          {/* CTA buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button 
               asChild 
               size="lg" 
-              className="gradient-primary text-white border-0 shadow-primary hover:shadow-glow transition-bounce px-8 py-3 text-lg font-semibold"
+              className="bg-primary hover:bg-primary/90 text-white shadow-elegant px-8 py-3 text-lg font-semibold rounded-lg transition-smooth"
             >
               <Link to="/register">
                 Get Started Free
@@ -66,7 +61,7 @@ export function HeroSection() {
               asChild 
               variant="outline" 
               size="lg"
-              className="border-2 border-primary/20 hover:border-primary/40 hover:bg-primary/5 px-8 py-3 text-lg font-semibold transition-smooth"
+              className="border-2 border-slate-200 hover:border-primary/40 hover:bg-primary/5 px-8 py-3 text-lg font-semibold transition-smooth rounded-lg"
             >
               <Link to="/login">
                 Sign In
@@ -74,18 +69,23 @@ export function HeroSection() {
             </Button>
           </div>
 
-          {/* Trust indicators */}
           <div className="mt-16 text-center">
-            <p className="text-sm text-muted-foreground mb-4">Trusted by educators worldwide</p>
-            <div className="flex justify-center items-center space-x-8 opacity-60">
-              <div className="text-2xl font-bold text-primary">1000+</div>
-              <div className="text-sm text-muted-foreground">Schools</div>
-              <div className="w-px h-8 bg-border" />
-              <div className="text-2xl font-bold text-accent">50K+</div>
-              <div className="text-sm text-muted-foreground">Students</div>
-              <div className="w-px h-8 bg-border" />
-              <div className="text-2xl font-bold text-secondary">10K+</div>
-              <div className="text-sm text-muted-foreground">Teachers</div>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Trusted by educational institutions worldwide</p>
+            <div className="flex justify-center items-center space-x-12 opacity-70">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary mb-1">1,000+</div>
+                <div className="text-sm text-slate-500 dark:text-slate-400">Schools</div>
+              </div>
+              <div className="w-px h-12 bg-slate-200 dark:bg-slate-700" />
+              <div className="text-center">
+                <div className="text-3xl font-bold text-accent mb-1">50K+</div>
+                <div className="text-sm text-slate-500 dark:text-slate-400">Students</div>
+              </div>
+              <div className="w-px h-12 bg-slate-200 dark:bg-slate-700" />
+              <div className="text-center">
+                <div className="text-3xl font-bold text-secondary mb-1">10K+</div>
+                <div className="text-sm text-slate-500 dark:text-slate-400">Teachers</div>
+              </div>
             </div>
           </div>
         </div>

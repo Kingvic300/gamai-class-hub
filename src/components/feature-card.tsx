@@ -19,24 +19,22 @@ export function FeatureCard({
 }: FeatureCardProps) {
   return (
     <Card className={cn(
-      "group relative overflow-hidden transition-smooth hover:shadow-primary hover:-translate-y-1 gradient-card border-0",
-      variant === "accent" && "hover:shadow-accent",
-      variant === "secondary" && "hover:shadow-secondary",
+      "group relative overflow-hidden transition-smooth hover:shadow-elegant hover:-translate-y-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700",
       className
     )}>
-      <CardContent className="p-6">
+      <CardContent className="p-8">
         <div className={cn(
-          "w-12 h-12 rounded-xl mb-4 flex items-center justify-center transition-smooth group-hover:scale-110",
-          variant === "default" && "bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground",
-          variant === "accent" && "bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground",
-          variant === "secondary" && "bg-secondary/10 text-secondary group-hover:bg-secondary group-hover:text-secondary-foreground"
+          "w-14 h-14 rounded-xl mb-6 flex items-center justify-center transition-smooth group-hover:scale-110",
+          variant === "default" && "bg-primary/10 text-primary",
+          variant === "accent" && "bg-accent/10 text-accent",
+          variant === "secondary" && "bg-secondary/10 text-secondary"
         )}>
-          <Icon className="h-6 w-6" />
+          <Icon className="h-7 w-7" />
         </div>
-        <h3 className="text-lg font-semibold mb-2 text-foreground group-hover:text-primary transition-smooth">
+        <h3 className="text-xl font-semibold mb-3 text-slate-900 dark:text-slate-100 group-hover:text-primary transition-smooth">
           {title}
         </h3>
-        <p className="text-muted-foreground text-sm leading-relaxed">
+        <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
           {description}
         </p>
       </CardContent>

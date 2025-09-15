@@ -15,68 +15,68 @@ export function RoleSection() {
     {
       icon: Users,
       title: "For Administrators",
-      description: "Complete control and oversight of your educational institution",
+      description: "Complete oversight and management of your educational institution with powerful administrative tools",
       features: [
-        "User management and approvals",
-        "Comprehensive analytics dashboard",
-        "System-wide configurations",
-        "Multi-school support"
+        "User management and approval workflows",
+        "Comprehensive analytics and reporting",
+        "System-wide configuration controls",
+        "Multi-institution support capabilities"
       ],
       color: "bg-primary/10 text-primary",
-      buttonStyle: "gradient-primary text-white shadow-primary hover:shadow-glow"
+      buttonStyle: "bg-primary hover:bg-primary/90 text-white shadow-elegant"
     },
     {
       icon: GraduationCap,
       title: "For Teachers",
-      description: "Empower your teaching with intelligent tools and insights",
+      description: "Enhance your teaching effectiveness with intelligent tools and comprehensive student insights",
       features: [
-        "Easy class creation and booking",
-        "Material upload and organization",
-        "Assessment creation tools",
-        "Student progress tracking"
+        "Streamlined class creation and management",
+        "Advanced material organization system",
+        "Sophisticated assessment creation tools",
+        "Detailed student progress analytics"
       ],
       color: "bg-accent/10 text-accent",
-      buttonStyle: "bg-accent text-accent-foreground shadow-accent hover:bg-accent/90"
+      buttonStyle: "bg-accent hover:bg-accent/90 text-white shadow-elegant"
     },
     {
       icon: BookOpen,
       title: "For Students",
-      description: "Engage with your learning journey like never before",
+      description: "Engage with your learning journey through intuitive tools designed for academic success",
       features: [
-        "Join classes with one click",
-        "Access all course materials",
-        "Interactive assessments",
-        "Track your progress"
+        "One-click class joining and participation",
+        "Centralized access to all course materials",
+        "Interactive assessment experiences",
+        "Personal progress tracking dashboard"
       ],
       color: "bg-secondary/10 text-secondary",
-      buttonStyle: "bg-secondary text-secondary-foreground shadow-secondary hover:bg-secondary/90"
+      buttonStyle: "bg-secondary hover:bg-secondary/90 text-white shadow-elegant"
     },
     {
       icon: Heart,
       title: "For Parents",
-      description: "Stay connected with your child's educational progress",
+      description: "Stay actively involved in your child's educational journey with comprehensive monitoring tools",
       features: [
-        "Monitor child's classes",
-        "View progress reports",
-        "Receive important notifications",
-        "Communicate with teachers"
+        "Real-time class attendance monitoring",
+        "Detailed progress reports and insights",
+        "Important notification management",
+        "Direct teacher communication channels"
       ],
       color: "bg-success/10 text-success",
-      buttonStyle: "bg-success text-success-foreground hover:bg-success/90"
+      buttonStyle: "bg-success hover:bg-success/90 text-white shadow-elegant"
     }
   ];
 
   return (
-    <section className="py-24 bg-background">
+    <section className="py-24 bg-slate-50 dark:bg-slate-800">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-            <span className="text-foreground">Built for</span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 tracking-tight">
+            <span className="text-slate-900 dark:text-slate-100">Designed for</span>
             <br />
             <span className="text-gradient">Every Educational Role</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Gamai provides tailored experiences designed specifically for each member 
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
+            Tailored experiences and specialized tools designed specifically for each member 
             of your educational community.
           </p>
         </div>
@@ -85,32 +85,32 @@ export function RoleSection() {
           {roles.map((role, index) => {
             const Icon = role.icon;
             return (
-              <Card key={index} className="group relative overflow-hidden transition-smooth hover:shadow-primary hover:-translate-y-1 gradient-card border-0">
+              <Card key={index} className="group relative overflow-hidden transition-smooth hover:shadow-elegant hover:-translate-y-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
                 <CardContent className="p-8">
                   <div className={`w-16 h-16 rounded-2xl mb-6 flex items-center justify-center transition-smooth group-hover:scale-110 ${role.color}`}>
                     <Icon className="h-8 w-8" />
                   </div>
                   
-                  <h3 className="text-2xl font-bold mb-4 text-foreground group-hover:text-primary transition-smooth">
+                  <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-slate-100 group-hover:text-primary transition-smooth">
                     {role.title}
                   </h3>
                   
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                  <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
                     {role.description}
                   </p>
 
                   <ul className="space-y-3 mb-8">
                     {role.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center space-x-3">
-                        <CheckCircle className="h-5 w-5 text-success flex-shrink-0" />
-                        <span className="text-foreground">{feature}</span>
+                      <li key={featureIndex} className="flex items-start space-x-3">
+                        <CheckCircle className="h-5 w-5 text-success flex-shrink-0 mt-0.5" />
+                        <span className="text-slate-700 dark:text-slate-300">{feature}</span>
                       </li>
                     ))}
                   </ul>
 
                   <Button 
                     asChild 
-                    className={`w-full transition-bounce ${role.buttonStyle}`}
+                    className={`w-full transition-smooth ${role.buttonStyle}`}
                   >
                     <Link to="/register">
                       Get Started

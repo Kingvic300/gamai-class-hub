@@ -16,7 +16,7 @@ export function Logo({ className, size = "md" }: LogoProps) {
   return (
     <div className={cn("font-bold tracking-tight", sizeClasses[size], className)}>
       <span className="text-gradient">GAM</span>
-      <span className="text-secondary">AI</span>
+      <span className="text-accent">AI</span>
     </div>
   );
 }

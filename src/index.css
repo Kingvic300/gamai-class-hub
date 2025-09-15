@@ -2,136 +2,104 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Gamai Educational Platform Design System - inspired by GAMAI and RAOATECH branding
-All colors MUST be HSL and follow the purple/orange/teal theme */
+/* Professional Educational Platform Design System */
 
 @layer base {
   :root {
     /* Background and base colors */
-    --background: 250 100% 99%;
-    --foreground: 260 15% 15%;
+    --background: 255 255 255;
+    --foreground: 15 23 42;
 
     /* Card and surface colors */
-    --card: 0 0% 100%;
-    --card-foreground: 260 15% 15%;
+    --card: 255 255 255;
+    --card-foreground: 15 23 42;
 
     /* Popover colors */
-    --popover: 0 0% 100%;
-    --popover-foreground: 260 15% 15%;
+    --popover: 255 255 255;
+    --popover-foreground: 15 23 42;
 
-    /* Primary brand colors - Deep purple from GAMAI logo */
-    --primary: 275 85% 35%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 280 90% 55%;
+    /* Primary brand colors - Professional blue */
+    --primary: 59 130 246;
+    --primary-foreground: 255 255 255;
 
-    /* Secondary colors - Warm orange from GAMAI AI element */
-    --secondary: 35 95% 65%;
-    --secondary-foreground: 260 15% 15%;
+    /* Secondary colors - Elegant gray */
+    --secondary: 100 116 139;
+    --secondary-foreground: 255 255 255;
 
     /* Muted colors */
-    --muted: 250 20% 96%;
-    --muted-foreground: 260 10% 50%;
+    --muted: 248 250 252;
+    --muted-foreground: 100 116 139;
 
-    /* Accent colors - Teal from RAOATECH */
-    --accent: 185 85% 55%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent colors - Professional teal */
+    --accent: 14 165 233;
+    --accent-foreground: 255 255 255;
 
-    /* Success and education theme */
-    --success: 145 65% 50%;
-    --success-foreground: 0 0% 100%;
+    /* Success colors */
+    --success: 34 197 94;
+    --success-foreground: 255 255 255;
 
     /* Destructive colors */
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 239 68 68;
+    --destructive-foreground: 255 255 255;
 
     /* Border and input colors */
-    --border: 250 30% 90%;
-    --input: 250 30% 90%;
-    --ring: 275 85% 35%;
+    --border: 226 232 240;
+    --input: 226 232 240;
+    --ring: 59 130 246;
 
     /* Radius */
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    /* Gradients for beautiful effects */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(35 100% 75%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--secondary)) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(250 50% 98%) 100%);
-
-    /* Shadows with brand colors */
-    --shadow-primary: 0 10px 30px -5px hsl(var(--primary) / 0.3);
-    --shadow-secondary: 0 10px 30px -5px hsl(var(--secondary) / 0.3);
-    --shadow-accent: 0 10px 30px -5px hsl(var(--accent) / 0.3);
-    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.4);
-
-    /* Animation and transitions */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 248 250 252;
+    --sidebar-foreground: 15 23 42;
+    --sidebar-primary: 59 130 246;
+    --sidebar-primary-foreground: 255 255 255;
+    --sidebar-accent: 241 245 249;
+    --sidebar-accent-foreground: 15 23 42;
+    --sidebar-border: 226 232 240;
+    --sidebar-ring: 59 130 246;
   }
 
   .dark {
-    /* Dark mode with purple theme */
-    --background: 260 25% 8%;
-    --foreground: 250 50% 95%;
+    --background: 2 6 23;
+    --foreground: 248 250 252;
 
-    --card: 260 20% 10%;
-    --card-foreground: 250 50% 95%;
+    --card: 15 23 42;
+    --card-foreground: 248 250 252;
 
-    --popover: 260 20% 10%;
-    --popover-foreground: 250 50% 95%;
+    --popover: 15 23 42;
+    --popover-foreground: 248 250 252;
 
-    --primary: 280 90% 65%;
-    --primary-foreground: 260 25% 8%;
-    --primary-glow: 285 95% 75%;
+    --primary: 99 102 241;
+    --primary-foreground: 248 250 252;
 
-    --secondary: 35 90% 60%;
-    --secondary-foreground: 260 25% 8%;
+    --secondary: 51 65 85;
+    --secondary-foreground: 248 250 252;
 
-    --muted: 260 15% 15%;
-    --muted-foreground: 250 20% 65%;
+    --muted: 30 41 59;
+    --muted-foreground: 148 163 184;
 
-    --accent: 185 80% 60%;
-    --accent-foreground: 260 25% 8%;
+    --accent: 56 189 248;
+    --accent-foreground: 2 6 23;
 
-    --success: 145 60% 55%;
-    --success-foreground: 260 25% 8%;
+    --success: 34 197 94;
+    --success-foreground: 248 250 252;
 
-    --destructive: 0 75% 55%;
-    --destructive-foreground: 250 50% 95%;
+    --destructive: 239 68 68;
+    --destructive-foreground: 248 250 252;
 
-    --border: 260 15% 20%;
-    --input: 260 15% 20%;
-    --ring: 280 90% 65%;
+    --border: 51 65 85;
+    --input: 51 65 85;
+    --ring: 99 102 241;
 
-    /* Dark mode gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(35 95% 70%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--secondary)) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(260 20% 12%) 0%, hsl(260 25% 8%) 100%);
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 15 23 42;
+    --sidebar-foreground: 248 250 252;
+    --sidebar-primary: 99 102 241;
+    --sidebar-primary-foreground: 248 250 252;
+    --sidebar-accent: 30 41 59;
+    --sidebar-accent-foreground: 248 250 252;
+    --sidebar-border: 51 65 85;
+    --sidebar-ring: 99 102 241;
   }
 }
 
@@ -142,11 +110,12 @@ All colors MUST be HSL and follow the purple/orange/teal theme */
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 
-  /* Custom scrollbar */
+  /* Professional scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
 
   ::-webkit-scrollbar-track {
@@ -154,56 +123,28 @@ All colors MUST be HSL and follow the purple/orange/teal theme */
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-primary/50 rounded-full;
+    @apply bg-border rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary/70;
+    @apply bg-primary/50;
   }
 }
 
 @layer utilities {
-  .gradient-primary {
-    background: var(--gradient-primary);
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
   }
 
-  .gradient-secondary {
-    background: var(--gradient-secondary);
+  .shadow-elegant {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
 
-  .gradient-hero {
-    background: var(--gradient-hero);
-  }
-
-  .gradient-card {
-    background: var(--gradient-card);
-  }
-
-  .shadow-primary {
-    box-shadow: var(--shadow-primary);
-  }
-
-  .shadow-secondary {
-    box-shadow: var(--shadow-secondary);
-  }
-
-  .shadow-accent {
-    box-shadow: var(--shadow-accent);
-  }
-
-  .shadow-glow {
-    box-shadow: var(--shadow-glow);
+  .shadow-soft {
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   }
 
   .transition-smooth {
-    transition: var(--transition-smooth);
-  }
-
-  .transition-bounce {
-    transition: var(--transition-bounce);
-  }
-
-  .text-gradient {
-    @apply bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }

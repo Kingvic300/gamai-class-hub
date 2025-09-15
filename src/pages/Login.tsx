@@ -25,7 +25,7 @@ export default function Login() {
 
   const handleInputChange = (field: string, value: string) => {
     setCredentials(prev => ({ ...prev, [field]: value }));
-    if (error) setError(""); // Clear error when user starts typing
+    if (error) setError("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -48,12 +48,12 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md gradient-card border-0 shadow-primary">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-elegant">
         <CardHeader className="text-center pb-2">
           <Logo className="mx-auto mb-4" />
           <CardTitle className="text-2xl font-bold text-gradient">Welcome Back</CardTitle>
-          <p className="text-muted-foreground">
+          <p className="text-slate-600 dark:text-slate-300">
             Sign in to your Gamai account
           </p>
         </CardHeader>
@@ -61,13 +61,13 @@ export default function Login() {
         <CardContent className="space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-3">
-                <p className="text-sm text-destructive">{error}</p>
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+                <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
               </div>
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
+              <Label htmlFor="email" className="text-slate-700 dark:text-slate-300">Email Address</Label>
               <Input
                 id="email"
                 type="email"
@@ -76,11 +76,12 @@ export default function Login() {
                 placeholder="Enter your email"
                 required
                 disabled={isLoading}
+                className="border-slate-200 dark:border-slate-600 focus:border-primary focus:ring-primary"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-slate-700 dark:text-slate-300">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -90,11 +91,12 @@ export default function Login() {
                   placeholder="Enter your password"
                   required
                   disabled={isLoading}
+                  className="border-slate-200 dark:border-slate-600 focus:border-primary focus:ring-primary pr-10"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
                   disabled={isLoading}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -104,7 +106,7 @@ export default function Login() {
 
             <Button 
               type="submit"
-              className="w-full gradient-primary text-white shadow-primary hover:shadow-glow transition-bounce"
+              className="w-full bg-primary hover:bg-primary/90 text-white shadow-elegant transition-smooth"
               disabled={isLoading || !credentials.email || !credentials.password}
             >
               {isLoading ? "Signing In..." : "Sign In"}
@@ -113,7 +115,7 @@ export default function Login() {
           </form>
 
           <div className="text-center">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-slate-600 dark:text-slate-400">
               Don't have an account?{" "}
               <Link to="/register" className="text-primary hover:underline font-medium">
                 Sign up
@@ -122,7 +124,7 @@ export default function Login() {
           </div>
 
           <div className="text-center">
-            <Link to="/" className="text-sm text-muted-foreground hover:text-primary transition-smooth">
+            <Link to="/" className="text-sm text-slate-500 hover:text-primary transition-smooth">
               ← Back to Home
             </Link>
           </div>

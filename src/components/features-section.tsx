@@ -8,79 +8,79 @@ import {
   BookOpen,
   Target,
   Shield,
-  Zap
+  BarChart3
 } from "lucide-react";
 
 export function FeaturesSection() {
   const features = [
     {
       icon: Calendar,
-      title: "Smart Class Booking",
-      description: "Teachers create and manage classes with AI-optimized scheduling. Students join seamlessly with real-time availability.",
+      title: "Smart Class Management",
+      description: "Streamlined class scheduling with automated notifications and seamless booking system for optimal learning experiences.",
       variant: "default" as const
     },
     {
       icon: FileText,
-      title: "Materials Management",
-      description: "Upload, organize, and share course materials with intelligent categorization and easy access for all participants.",
+      title: "Resource Library",
+      description: "Centralized material management with intelligent organization, version control, and instant access across all devices.",
       variant: "accent" as const
     },
     {
       icon: Award,
-      title: "Interactive Assessments",
-      description: "Create engaging quizzes and assignments with instant feedback and detailed analytics on student performance.",
+      title: "Assessment Tools",
+      description: "Comprehensive evaluation system with real-time feedback, detailed analytics, and customizable grading rubrics.",
       variant: "secondary" as const
     },
     {
       icon: BookOpen,
-      title: "Dynamic Curriculum",
-      description: "Adaptive curriculum that adjusts to student progress with AI-powered recommendations and learning paths.",
+      title: "Curriculum Planning",
+      description: "Structured learning pathways with progress tracking, milestone management, and adaptive content delivery.",
       variant: "default" as const
     },
     {
       icon: Bell,
-      title: "Smart Notifications",
-      description: "Real-time alerts for classes, assignments, and important updates delivered across all platforms.",
+      title: "Communication Hub",
+      description: "Unified messaging system connecting all stakeholders with priority alerts and scheduled announcements.",
       variant: "accent" as const
     },
     {
       icon: Users,
-      title: "Multi-Role Access",
-      description: "Tailored experiences for admins, teachers, students, and parents with role-based permissions and features.",
+      title: "Role-Based Access",
+      description: "Secure permission system tailored for administrators, teachers, students, and parents with granular controls.",
       variant: "secondary" as const
     },
     {
       icon: Target,
-      title: "Progress Tracking",
-      description: "Comprehensive analytics and reporting tools to monitor student progress and identify improvement areas.",
+      title: "Performance Analytics",
+      description: "Data-driven insights with comprehensive reporting, trend analysis, and actionable recommendations.",
       variant: "default" as const
     },
     {
       icon: Shield,
-      title: "Secure Platform",
-      description: "Enterprise-grade security with data protection, privacy controls, and compliance with educational standards.",
+      title: "Enterprise Security",
+      description: "Bank-level security with encrypted data transmission, secure authentication, and compliance standards.",
       variant: "accent" as const
     },
     {
-      icon: Zap,
-      title: "AI-Powered Insights",
-      description: "Leverage artificial intelligence for personalized learning recommendations and predictive analytics.",
+      icon: BarChart3,
+      title: "Smart Insights",
+      description: "Advanced analytics engine providing personalized learning recommendations and predictive performance metrics.",
       variant: "secondary" as const
     }
   ];
 
   return (
-    <section className="py-24 bg-muted/30">
+    <section className="py-24 bg-white dark:bg-slate-900">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-            <span className="text-gradient">Powerful Features</span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 tracking-tight">
+            <span className="text-gradient">Comprehensive Features</span>
             <br />
-            <span className="text-foreground">for Modern Education</span>
+            <span className="text-slate-900 dark:text-slate-100">for Modern Education</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
             Everything you need to create engaging, effective, and efficient learning experiences 
-            for everyone in your educational community.
+            for your entire educational community.
           </p>
         </div>
 
