@@ -1,286 +1,192 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ArrowRight, ArrowLeft, Users, GraduationCap, BookOpen, Heart } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Logo } from "@/components/logo";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { Navigation } from "@/components/ui/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { 
+  Users, 
+  GraduationCap, 
+  BookOpen, 
+  Calendar,
+  Award,
+  Bell,
+  TrendingUp,
+  Activity
+} from "lucide-react";
 
-type Role = "admin" | "teacher" | "student" | "parent";
+export default function Dashboard() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-interface SurveyQuestion {
-  id: string;
-  question: string;
-  options: Array<{
-    value: string;
-    label: string;
-    icon?: React.ElementType;
-    role?: Role;
-  }>;
-}
+  useEffect(() => {
+    // Redirect admin users to admin dashboard
+    if (user?.role === 'admin') {
+      navigate('/admin', { replace: true });
+    }
+  }, [user, navigate]);
 
-const surveyQuestions: SurveyQuestion[] = [
-  {
-    id: "primary-role",
-    question: "What best describes your primary role in education?",
-    options: [
-      { value: "admin", label: "Administrator / Principal", icon: Users, role: "admin" },
-      { value: "teacher", label: "Teacher / Educator", icon: GraduationCap, role: "teacher" },
-      { value: "student", label: "Student / Learner", icon: BookOpen, role: "student" },
-      { value: "parent", label: "Parent / Guardian", icon: Heart, role: "parent" }
-    ]
-  },
-  {
-    id: "institution-type",
-    question: "What type of educational institution are you associated with?",
-    options: [
-      { value: "k12", label: "K-12 School" },
-      { value: "university", label: "University / College" },
-      { value: "training", label: "Training Center" },
-      { value: "tutoring", label: "Private Tutoring" },
-      { value: "other", label: "Other" }
-    ]
-  },
-  {
-    id: "class-size",
-    question: "What's your typical class or group size?",
-    options: [
-      { value: "small", label: "1-10 students" },
-      { value: "medium", label: "11-30 students" },
-      { value: "large", label: "31-100 students" },
-      { value: "xlarge", label: "100+ students" }
-    ]
-  },
-  {
-    id: "tech-comfort",
-    question: "How comfortable are you with educational technology?",
-    options: [
-      { value: "beginner", label: "Beginner - New to educational tech" },
-      { value: "intermediate", label: "Intermediate - Some experience" },
-      { value: "advanced", label: "Advanced - Very comfortable" },
-      { value: "expert", label: "Expert - I'm a tech enthusiast" }
-    ]
-  },
-  {
-    id: "main-goal",
-    question: "What's your main goal with Gamai?",
-    options: [
-      { value: "organize", label: "Better organization of classes and materials" },
-      { value: "engagement", label: "Increase student engagement" },
-      { value: "assessment", label: "Streamline assessments and feedback" },
-      { value: "communication", label: "Improve parent-teacher communication" },
-      { value: "analytics", label: "Track and analyze learning progress" }
-    ]
+  if (!user) {
+    return null; // This should be handled by ProtectedRoute, but just in case
   }
-];
 
-export default function Register() {
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [userInfo, setUserInfo] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    confirmPassword: ""
-  });
-  const [isLoading, setIsLoading] = useState(false);
-
-  const currentQuestion = surveyQuestions[step];
-  const isFirstStep = step === 0;
-  const isLastStep = step === surveyQuestions.length - 1;
-  const isSurveyComplete = step >= surveyQuestions.length;
-
-  const determineRole = (): Role => {
-    // Priority given to the first question's role mapping
-    const primaryRole = currentQuestion?.options.find(opt => opt.value === answers["primary-role"])?.role;
-    return primaryRole || "student";
-  };
-
-  const handleAnswer = (value: string) => {
-    setAnswers(prev => ({ ...prev, [currentQuestion.id]: value }));
-  };
-
-  const handleNext = () => {
-    if (step < surveyQuestions.length) {
-      setStep(step + 1);
+  const getDashboardContent = () => {
+    switch (user.role) {
+      case 'teacher':
+        return {
+          title: "Teacher Dashboard",
+          subtitle: "Manage your classes and track student progress",
+          stats: [
+            { icon: Users, label: "Active Students", value: "124", color: "text-primary" },
+            { icon: BookOpen, label: "Classes This Week", value: "8", color: "text-accent" },
+            { icon: Award, label: "Assessments Created", value: "15", color: "text-secondary" },
+            { icon: Calendar, label: "Upcoming Classes", value: "3", color: "text-success" }
+          ],
+          quickActions: [
+            { label: "Create Class", href: "/classes", icon: Calendar },
+            { label: "Upload Materials", href: "/materials", icon: BookOpen },
+            { label: "Create Assessment", href: "/assessments", icon: Award },
+            { label: "View Curriculum", href: "/curriculum", icon: GraduationCap }
+          ]
+        };
+      
+      case 'student':
+        return {
+          title: "Student Dashboard",
+          subtitle: "Track your learning progress and upcoming classes",
+          stats: [
+            { icon: BookOpen, label: "Enrolled Classes", value: "6", color: "text-primary" },
+            { icon: Calendar, label: "Classes This Week", value: "12", color: "text-accent" },
+            { icon: Award, label: "Completed Assessments", value: "8", color: "text-secondary" },
+            { icon: TrendingUp, label: "Average Score", value: "87%", color: "text-success" }
+          ],
+          quickActions: [
+            { label: "Join Classes", href: "/classes", icon: Calendar },
+            { label: "Access Materials", href: "/materials", icon: BookOpen },
+            { label: "Take Assessments", href: "/assessments", icon: Award },
+            { label: "View Schedule", href: "/curriculum", icon: GraduationCap }
+          ]
+        };
+      
+      case 'parent':
+        return {
+          title: "Parent Dashboard",
+          subtitle: "Monitor your child's educational progress",
+          stats: [
+            { icon: Users, label: "Children", value: "2", color: "text-primary" },
+            { icon: Calendar, label: "Classes This Week", value: "16", color: "text-accent" },
+            { icon: Award, label: "Recent Assessments", value: "5", color: "text-secondary" },
+            { icon: Activity, label: "Attendance Rate", value: "95%", color: "text-success" }
+          ],
+          quickActions: [
+            { label: "View Classes", href: "/classes", icon: Calendar },
+            { label: "Check Materials", href: "/materials", icon: BookOpen },
+            { label: "Review Assessments", href: "/assessments", icon: Award },
+            { label: "View Schedule", href: "/curriculum", icon: GraduationCap }
+          ]
+        };
+      
+      default:
+        return {
+          title: "Dashboard",
+          subtitle: "Welcome to Gamai",
+          stats: [],
+          quickActions: []
+        };
     }
   };
 
-  const handleBack = () => {
-    if (step > 0) {
-      setStep(step - 1);
-    }
-  };
-
-  const handleUserInfoChange = (field: string, value: string) => {
-    setUserInfo(prev => ({ ...prev, [field]: value }));
-  };
-
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    // Here you would integrate with your backend/Supabase
-    console.log("User registration:", { userInfo, answers, role: determineRole() });
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsLoading(false);
-    
-    // Redirect to appropriate dashboard based on role
-    window.location.href = `/${determineRole()}`;
-  };
-
-  if (isSurveyComplete) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md gradient-card border-0 shadow-primary">
-          <CardHeader className="text-center pb-2">
-            <Logo className="mx-auto mb-4" />
-            <CardTitle className="text-2xl font-bold text-gradient">Complete Your Registration</CardTitle>
-            <p className="text-muted-foreground">
-              Based on your answers, you'll be registered as a <span className="font-semibold text-primary">{determineRole()}</span>
-            </p>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
-              <Input
-                id="fullName"
-                value={userInfo.fullName}
-                onChange={(e) => handleUserInfoChange("fullName", e.target.value)}
-                placeholder="Enter your full name"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
-              <Input
-                id="email"
-                type="email"
-                value={userInfo.email}
-                onChange={(e) => handleUserInfoChange("email", e.target.value)}
-                placeholder="Enter your email"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={userInfo.password}
-                onChange={(e) => handleUserInfoChange("password", e.target.value)}
-                placeholder="Create a password"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                value={userInfo.confirmPassword}
-                onChange={(e) => handleUserInfoChange("confirmPassword", e.target.value)}
-                placeholder="Confirm your password"
-              />
-            </div>
-            <Button 
-              onClick={handleSubmit} 
-              className="w-full gradient-primary text-white shadow-primary hover:shadow-glow transition-bounce"
-              disabled={isLoading || !userInfo.fullName || !userInfo.email || !userInfo.password || userInfo.password !== userInfo.confirmPassword}
-            >
-              {isLoading ? "Creating Account..." : "Create Account"}
-              {!isLoading && <ArrowRight className="ml-2 h-4 w-4" />}
-            </Button>
-            <p className="text-center text-sm text-muted-foreground">
-              Already have an account?{" "}
-              <Link to="/login" className="text-primary hover:underline">
-                Sign in
-              </Link>
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  const dashboardContent = getDashboardContent();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/30 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl gradient-card border-0 shadow-primary">
-        <CardHeader className="text-center pb-2">
-          <Logo className="mx-auto mb-4" />
-          <CardTitle className="text-2xl font-bold text-gradient">Join Gamai</CardTitle>
-          <p className="text-muted-foreground">
-            Let's personalize your experience with a few quick questions
-          </p>
-          <div className="flex justify-center mt-4">
-            <div className="flex space-x-2">
-              {surveyQuestions.map((_, index) => (
-                <div
-                  key={index}
-                  className={`w-3 h-3 rounded-full transition-smooth ${
-                    index <= step ? "bg-primary" : "bg-muted"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        </CardHeader>
-        
-        <CardContent className="pt-6">
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold mb-6 text-foreground">
-              {currentQuestion.question}
-            </h3>
-            
-            <RadioGroup
-              value={answers[currentQuestion.id] || ""}
-              onValueChange={handleAnswer}
-              className="space-y-3"
-            >
-              {currentQuestion.options.map((option) => {
-                const Icon = option.icon;
-                return (
-                  <div key={option.value} className="flex items-center space-x-3 p-4 rounded-lg border border-border hover:border-primary/50 hover:bg-primary/5 transition-smooth">
-                    <RadioGroupItem value={option.value} id={option.value} />
-                    {Icon && (
-                      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <Icon className="h-4 w-4 text-primary" />
-                      </div>
-                    )}
-                    <Label 
-                      htmlFor={option.value} 
-                      className="flex-1 cursor-pointer text-foreground hover:text-primary transition-smooth"
-                    >
-                      {option.label}
-                    </Label>
-                  </div>
-                );
-              })}
-            </RadioGroup>
-          </div>
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      
+      <main className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-foreground mb-2">{dashboardContent.title}</h1>
+          <p className="text-muted-foreground">{dashboardContent.subtitle}</p>
+          <p className="text-sm text-muted-foreground mt-1">Welcome back, {user.fullName}!</p>
+        </div>
 
-          <div className="flex justify-between">
-            <Button
-              variant="outline"
-              onClick={handleBack}
-              disabled={isFirstStep}
-              className="px-6"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back
-            </Button>
-            
-            <Button
-              onClick={handleNext}
-              disabled={!answers[currentQuestion.id]}
-              className="px-6 gradient-primary text-white shadow-primary hover:shadow-glow transition-bounce"
-            >
-              {isLastStep ? "Continue to Registration" : "Next"}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+        {/* Stats Grid */}
+        {dashboardContent.stats.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {dashboardContent.stats.map((stat, index) => {
+              const Icon = stat.icon;
+              return (
+                <Card key={index} className="gradient-card border-0 hover:shadow-primary transition-smooth">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
+                        <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                      </div>
+                      <div className={`w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center`}>
+                        <Icon className={`h-6 w-6 ${stat.color}`} />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
-        </CardContent>
-      </Card>
+        )}
+
+        {/* Quick Actions */}
+        {dashboardContent.quickActions.length > 0 && (
+          <Card className="gradient-card border-0">
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Activity className="h-5 w-5 text-primary" />
+                <span>Quick Actions</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {dashboardContent.quickActions.map((action, index) => {
+                  const Icon = action.icon;
+                  return (
+                    <Button
+                      key={index}
+                      asChild
+                      variant="outline"
+                      className="h-auto p-4 flex flex-col items-center space-y-2 hover:bg-primary/5 hover:border-primary/30 transition-smooth"
+                    >
+                      <a href={action.href}>
+                        <Icon className="h-6 w-6 text-primary" />
+                        <span className="text-sm font-medium">{action.label}</span>
+                      </a>
+                    </Button>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Recent Activity */}
+        <Card className="gradient-card border-0 mt-8">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Bell className="h-5 w-5 text-accent" />
+              <span>Recent Activity</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3 p-3 rounded-lg bg-muted/30">
+                <div className="w-2 h-2 bg-success rounded-full"></div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium">Welcome to Gamai!</p>
+                  <p className="text-xs text-muted-foreground">Your account has been successfully created</p>
+                </div>
+                <span className="text-xs text-muted-foreground">Just now</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </main>
     </div>
   );
 }

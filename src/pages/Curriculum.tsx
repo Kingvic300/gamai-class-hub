@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigation } from "@/components/ui/navigation";
+import Navigation from "@/components/ui/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -128,7 +128,6 @@ export default function Curriculum() {
         setTimeout(() => {
           new Notification(`Upcoming Class: ${event.title}`, {
             body: `Starting in 15 minutes at ${event.location}`,
-            icon: '/favicon.ico'
           });
         }, notificationTime);
       }
